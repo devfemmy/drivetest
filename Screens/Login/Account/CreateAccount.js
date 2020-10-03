@@ -7,8 +7,8 @@ import CustomInput from '../../../Components/CustomInput';
 
 const CreateAccount = () => {
     return (
-        <View style= {styles.container}>
-            <ScrollView style= {styles.upperContainer}>
+        <ScrollView style= {styles.container}>
+            <View style= {styles.upperContainer}>
                 <Text style= {styles.textStyle}>
                 Create Account
                 </Text>
@@ -22,18 +22,18 @@ const CreateAccount = () => {
                 <CustomInput width= "100%" labelText= "Date of Birth" />
                 <CustomInput width= "100%" labelText= "Gender" />
                 </View>
-            </ScrollView>
+            </View>
             <View style= {styles.lowerContainer}>
                     <AppButtons bg= "#FBB03B" textColor= "white" text= "Create Account" />
             </View>
-        </View>
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        height: Dimensions.get('window').height,
+        // minHeight: Dimensions.get('window').height,
         padding: 25
     },
     flexContainer: {
@@ -42,16 +42,16 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap'
     },
     upperContainer: {
-        paddingVertical: 25
+        paddingVertical: 10
     },
     lowerContainer: {
-        marginVertical: 50
+        marginVertical: 10
     },
     textStyle: {
         fontSize: 25,
         fontWeight: 'bold',
         color: "#2B2579",
-        marginVertical: 25
+        marginVertical: 5
     },
     textStyle2: {
         color: '#000000'

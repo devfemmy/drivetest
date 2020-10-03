@@ -2,8 +2,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from '../../Screens/Login/Login';
-import ForgotPassword from '../../Screens/Login/ForgotPassword';
-import CreateAccount from '../../Screens/Login/Account/CreateAccount';
+
 
 const Stack = createStackNavigator();
 

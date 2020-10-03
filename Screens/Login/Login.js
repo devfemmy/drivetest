@@ -14,8 +14,10 @@ const Login = (props) => {
                     <Text style= {styles.textStyle}>Login to your drive test account</Text>
                     <CustomInput labelText= "Email Address" />
                     <CustomInput labelText= "Password" />
-                    <AppButtons onPress= {() => props.navigation.navigate('CreateAccount')} bg= "#FBB03B" textColor= "white" text= "Login" />
+                    <AppButtons onPress= {() => console.log('Signing in')} bg= "#FBB03B" textColor= "white" text= "Login" />
                     <Text onPress= {() => props.navigation.navigate('ForgotPassword')} style= {styles.textStyle2}>Forgot Password?</Text>
+                    <Text style= {{color: 'white', marginTop: 15, textAlign: 'center', opacity: 0.5}} >Dont have an account?</Text>
+                    <Text onPress= {() => props.navigation.navigate('CreateAccount')} style= {{...styles.textStyle2}}>Create account here</Text>
             </View>
         </ScrollView>
     )
@@ -25,19 +27,17 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#2B2579',
-        height: Dimensions.get('window').height,
 
     },
     upperContainer: {
         backgroundColor: '#fff',
-        height: Dimensions.get('window').height/3.5,
+        // height: Dimensions.get('window').height/3.5,
         padding: 25,
         alignItems: 'center'
        
     },
     lowerContainer: {
         // backgroundColor: '#2B2579',
-        height: 200,
         paddingHorizontal: 25,
         paddingVertical: 30
 

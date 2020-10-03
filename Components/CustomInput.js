@@ -16,17 +16,21 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
 
         elevation: 5,
-        height: 66,
-        padding: 10,
+        minHeight: 50,
+        paddingHorizontal: 10,
         marginBottom: 20
     },
     label: {
         color: '#B4BBC6',
-        marginBottom: 5
+        fontSize: 10,
+        marginBottom: 0,
+        marginTop: 3
     },
     textInputStyle: {
         fontWeight: 'bold',
-        color: '#231E50'
+        color: '#231E50',
+        fontSize: 15,
+        paddingVertical: 5
     }
 });
     return (

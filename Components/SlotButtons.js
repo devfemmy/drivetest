@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
-const AppButtons = (props) => {
+const SlotButtons = (props) => {
     const styles = StyleSheet.create({
         btnContainer: {
-            height: 60,
+            height: 45,
             alignItems: "center",
             justifyContent: 'center',
             backgroundColor: props.bg,
@@ -12,6 +12,7 @@ const AppButtons = (props) => {
             borderRadius: 5,
             borderTopLeftRadius: props.btlr,
             borderTopRightRadius: props.btrr,
+            paddingHorizontal: 5
            
         },
         textColor: {
@@ -24,7 +25,6 @@ const AppButtons = (props) => {
         <View>
             <TouchableOpacity onPress= {props.onPress} style= {styles.btnContainer}>
                 <Text style= {styles.textColor}>
-                  <Image source= {props.source} style= {{width: 18, height: 18, resizeMode: 'contain'}} />
                   {props.text}
                 </Text>
             </TouchableOpacity>
@@ -34,4 +34,4 @@ const AppButtons = (props) => {
 
 
 
-export default AppButtons;
+export default SlotButtons;

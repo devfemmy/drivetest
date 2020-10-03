@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Progress from 'react-native-progress';
 import { View, StyleSheet,Text, ScrollView, Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CarImage from '../../assets/images/car.svg';
@@ -26,13 +27,14 @@ const HomePage = (props) => {
                         <SlotBtn name= "Advanced" />
                     </ScrollView>
                </View>
-               <TouchableOpacity>
+               <TouchableOpacity onPress= {() => props.navigation.navigate('Question')}>
                 <View style= {styles.slotBox}>
                         <View style= {styles.flexContainer}>
                             <Text style= {styles.textStyle3}>Practise Test 1</Text>
                             <Text style= {styles.textStyle4}>Advanced</Text>
                         </View>
-                    </View>
+                        <Progress.Bar height= {10} color= "#BDFD40" borderColor= "#2B2579" progress={1.0} width={null} />
+                </View>
                </TouchableOpacity>
                <TouchableOpacity>
                 <View style= {styles.slotBox}>
@@ -40,6 +42,7 @@ const HomePage = (props) => {
                             <Text style= {styles.textStyle3}>Practise Test 2</Text>
                             <Text style= {styles.textStyle4}>Intermediate</Text>
                         </View>
+                        <Progress.Bar height= {10} color= "#FFE200" borderColor= "#2B2579" progress={0.8} width={null} />
                     </View>
                </TouchableOpacity>
                <TouchableOpacity>
@@ -48,6 +51,7 @@ const HomePage = (props) => {
                             <Text style= {styles.textStyle3}>Practise Test 3</Text>
                             <Text style= {styles.textStyle4}>Beginner</Text>
                         </View>
+                        <Progress.Bar height= {10} color= "#FF4E00" borderColor= "#2B2579" progress={0.5} width={null} />
                     </View>
                </TouchableOpacity>
                <TouchableOpacity>
@@ -56,6 +60,7 @@ const HomePage = (props) => {
                             <Text style= {styles.textStyle3}>Practise Test 4</Text>
                             <Text style= {styles.textStyle4}>Novice</Text>
                         </View>
+                        <Progress.Bar height= {10} color= "#FF0000" borderColor= "#2B2579" progress={0.3} width={null} />
                     </View>
                </TouchableOpacity>
            </View>

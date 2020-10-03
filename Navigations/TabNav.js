@@ -8,6 +8,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LoginNavigator from './Navigators/HomeNavigator';
 import HomePage from '../Screens/Home/Home';
+import Maranthon from '../Screens/Maranthon/Maranthon';
+import Exams from '../Screens/Exam/Exam';
+import History from '../Screens/Book History/History';
+import WelcomeScreen from '../Screens/Login/Welcome';
 
 
 
@@ -116,30 +120,46 @@ const TabNav = (props) => {
 
                         if (route.name === 'Login') {
                           iconName = focused
-                            ? 'ios-information-circle'
-                            : 'ios-information-circle-outline';
+                            ? 'ios-settings'
+                            : 'ios-settings-outline';
                         } else if (route.name === 'Training') {
                           iconName = focused ? 'ios-browsers' : 'ios-browsers-outline';
+                        }
+                        else if (route.name === 'Marathon') {
+                          iconName = focused ? 'ios-compass' : 'ios-compass-outline';
+                        }
+                        else if (route.name === 'Exam') {
+                          iconName = focused ? 'ios-book' : 'ios-book-outline';
+                        }
+                        else if (route.name === 'Book History') {
+                          iconName = focused ? 'ios-folder' : 'ios-folder-outline';
                         }
 
                         // You can return any component that you like here!
                         return <Icon name={iconName} size={size} color={color} />;
                       },
                     })}
+          
                     tabBarOptions={{
                       activeTintColor: '#2B2579',
                       inactiveTintColor: 'gray',
+                      keyboardHidesTabBar: true
                     }}
                   >
                       {state.userToken == null ? (
                         <>
                         <Tab.Screen name="Training" component={HomePage} />
+                        <Tab.Screen name="Marathon" component={Maranthon} />
+                        <Tab.Screen name="Exam" component={Exams} />
+                        <Tab.Screen name="Book History" component={History} />
                         <Tab.Screen name="Login" component={LoginNavigator}
                         />
+                       
                       
                         </>
                       ): (<> 
                       <Tab.Screen name="Training" component={HomePage} />
+                     
                       {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
                       </>)}
 
