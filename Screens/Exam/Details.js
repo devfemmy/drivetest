@@ -1,11 +1,89 @@
-import React from 'react';
-import { View, StyleSheet, ScrollView, Image, Text } from 'react-native';
+import React, { useState } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
+import { View, StyleSheet, ScrollView, ActivityIndicator, Text, Alert } from 'react-native';
 import ExamIcon from '../../assets/images/examicon.svg';
 import AppButtons from '../../Components/AppButtons';
 import CustomInput from '../../Components/CustomInput';
+import axios from '../../axios';
 
 
 const Details = (props) => {
+    const {time, date, address, name, price, time_id, slot_id} = props.route.params;
+    const [showBtn, setShowBtn] = useState(true)
+
+    const confirmAppointment = () => {
+        setShowBtn(false)
+        const token = AsyncStorage.getItem('token').then(
+            res => {
+                const data = {
+                    id: time_id,
+                    slot_id: slot_id, 
+                }
+                console.log("data to send", data)
+                axios.post('book/slot', data, {headers: {Authorization: res}})
+                .then(
+                    res => {  
+                       console.log(res, "success")
+                        const message = res.data.message; 
+                        Alert.alert(
+                            message,
+                            'Appointment Confirmed Successfully',
+                            [
+                              {text: 'OK', onPress: () => props.navigation.navigate('Exam')},
+                            ],
+                            { cancelable: false }
+                          )
+                    //    toggleOverlay()
+                        setShowBtn(true)
+                    }
+                )
+                .catch(err => {
+                    setShowBtn(true)
+                    console.log(err.response)
+                    const code = err.response.status;
+                    const message = err.response.data.message
+                    if (code === 400) {
+                        setShowBtn(true)
+                        Alert.alert(
+                            message,
+                            'Please Try Another',
+                            [
+                              {text: 'OK', onPress: () => props.navigation.navigate('Exam')},
+                            ],
+                            { cancelable: false }
+                          )
+                    }
+                    else if (code === 401) {
+                        Alert.alert(
+                            'Error!',
+                            'Expired Token',
+                            [
+                              {text: 'OK', onPress: () => null},
+                            ],
+                            { cancelable: false }
+                          )
+                      
+                    } else {
+                        console.log(err)
+                        setShowBtn(true)
+                        Alert.alert(
+                            'Network Error',
+                            'Please Try Again',
+                            [
+                              {text: 'OK', onPress: () => setShowBtn(true)},
+                            ],
+                            { cancelable: false }
+                          )
+                    }
+     
+                      
+                
+     
+                })
+            }
+        )
+        .catch( err => {console.log(err)})
+    }
     return (
         <View style= {styles.container}>
             <ScrollView>
@@ -14,19 +92,27 @@ const Details = (props) => {
                             <View style= {styles.flexContainer}>
                                     <ExamIcon width= {40} height= {40} />
                                     <View style= {{width: '83%'}}> 
-                                        <Text style= {styles.textStyle3}>Drive Test Lekki</Text>
-                                        <Text style= {styles.textStyle4}>16, lore ispum road, lekki, Lagos, Nigeria .</Text>
+                                        <Text style= {styles.textStyle3}>
+                                            {name}
+                                        </Text>
+                                        <Text style= {styles.textStyle4}>
+                                            {address}
+                                        </Text>
                                     </View>
                                 </View>
                     </View>
                     </View>
                     <View style= {styles.secondContainer}>
                     <Text style= {styles.textStyle4}>Date and Time</Text>
-                    <Text style= {styles.textStyle3}>Tomorrow, 20 Jul, 1:00am</Text>
+                    <Text style= {styles.textStyle3}>
+                        {`${date} ${time}`}
+                    </Text>
                     </View>
                     <View style= {styles.secondContainer}>
                     <Text style= {styles.textStyle4}>Price</Text>
-                    <Text style= {styles.textStyle3}>₦15,000</Text>
+                    <Text style= {styles.textStyle3}>
+                        {`₦${price}`}
+                    </Text>
                     </View>
                     <View style= {styles.thirdContainer}>
                         <Text style= {{fontWeight: 'bold', fontSize: 15, textAlign: 'center', marginBottom: 20}}>Please Provide your information below</Text>
@@ -36,7 +122,7 @@ const Details = (props) => {
                     </View>
             </ScrollView>
             <View style= {styles.footer}>
-            <AppButtons bg= "#2B2579" textColor= "white" text= "Confirm and Make Payment" />
+            {showBtn ?  <AppButtons onPress= {confirmAppointment} bg= "#2B2579" textColor= "white" text= "Confirm and Make Payment" />: <ActivityIndicator size= "large" color= "#000075"/>}
             </View>
 
         </View>

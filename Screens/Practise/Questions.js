@@ -5,11 +5,13 @@ import {
   ActivityIndicator,
   StyleSheet,
   Picker,
-  Button, Dimensions, Image
+  Button, Dimensions, Image, Alert,
 } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 import Question from "../../Components/Question";
 import Success from '../../assets/images/success.svg';
 import AppButtons from "../../Components/AppButtons";
+import axios from '../../axios';
 // import { Link } from "react-router-native";
 // import Question from "../components/Question";
 
@@ -33,20 +35,69 @@ export default class Questions extends React.Component {
     };
   }
 
-  fetchQuestions = async () => {
-    await this.setState({ loading: true });
-    const response = await fetch(
-      `https://opentdb.com/api.php?amount=10&difficulty=medium`
-    );
-    const questions = await response.json();
+  fetchQuestions = () => {
+    const {id} = this.props.route.params
+    // await this.setState({ loading: true });
+    this.setState({loading: true})
+    const token = AsyncStorage.getItem('token').then(
+      res => {
+          axios.get(`practice/${id}`, {headers: {Authorization: res}})
+          .then(
+            
+              res => {
+                console.log("questions", res)
+                const questions = res.data.data.questions;
+                // const { results } = questions;
+                // console.log("results", questions)
+            
+                questions.forEach(item => {
+                  item.id = Math.floor(Math.random() * 10000);
+                });
+                this.setState({loading: false, questions: questions});
+                  
+                 
+              }
+          )
+          .catch(err => {
+            this.setState({loading: false})
+              console.log(err.response)
+              const code = err.response.status;
+              if (code === 401) {
+                  Alert.alert(
+                      'Error!',
+                      'Expired Token',
+                      [
+                        {text: 'OK', onPress: () => null},
+                      ],
+                      { cancelable: false }
+                    )
+                
+              } else {
+                // setLoading(false)
+                  Alert.alert(
+                      'Network Error',
+                      'Please Try Again',
+                      [
+                        {text: 'OK', onPress: () => null},
+                      ],
+                      { cancelable: false }
+                    )
+              }
 
-    const { results } = questions;
+                
+                console.log(err.response.status)
 
-    results.forEach(item => {
-      item.id = Math.floor(Math.random() * 10000);
-    });
+          })
+      }
+  )
+  .catch( err => {console.log(err)}) 
+    // const response = await fetch(
+    //   `https://opentdb.com/api.php?amount=10&difficulty=medium`
+    // );
+    // const questions = await response.json();
 
-    await this.setState({ questions: results, loading: false });
+
+    // await this.setState({ questions: results, loading: false });
   };
 
   reset = () => {

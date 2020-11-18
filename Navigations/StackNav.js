@@ -13,6 +13,10 @@ import MaranthonQuestions from '../Screens/Maranthon/MaranthonQuestion';
 import Slot from '../Screens/Exam/Slot';
 import Details from '../Screens/Exam/Details';
 import WelcomeScreen from '../Screens/Login/Welcome';
+import Profile from '../Profile/Profile';
+import NextAppointment from '../Screens/Exam/NextExam';
+import ChangePassword from '../Settings/ChangePassword';
+import PractiseQuestions from '../Screens/Practise/PractiseQuestions';
 // import Playquiz from '../Screens/Practise/MainQuestion';
 
 const Stack = createStackNavigator()
@@ -35,9 +39,12 @@ const StackNav = () => {
             <Stack.Screen name="ForgotPassword" options= {{title: 'Forgot Password'}} component={ForgotPassword} />
             <Stack.Screen name="CreateAccount"  options= {{title: 'Create Account'}} component={CreateAccount} />
             <Stack.Screen name="Quiz"  options= {{title: 'Practise Question'}} component={Playquiz} />
-            <Stack.Screen name="Question"  options= {{title: 'Practise Questions'}} component={Questions} />
+            <Stack.Screen name="Question"  options= {{title: 'Practise Questions'}} component={PractiseQuestions} />
             <Stack.Screen name="Slots"  options= {{title: 'Select Time Slot'}} component={Slot} />
             <Stack.Screen name="Details"  options= {{title: 'Exam Details'}} component={Details} />
+            <Stack.Screen name="Next"  options= {{title: 'Centers'}} component={NextAppointment} />
+            <Stack.Screen name="Profile"  options= {{title: 'My Profile'}} component={Profile} />
+            <Stack.Screen name="ChangePassword" options= {{title: 'Change Password'}} component={ChangePassword} />
             <Stack.Screen name="MarathonQuestion"  options= {{title: 'Maranthon Questions'}} component={MaranthonQuestions} />
         </Stack.Navigator>
         </NavigationContainer>

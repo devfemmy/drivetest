@@ -12,6 +12,7 @@ import Maranthon from '../Screens/Maranthon/Maranthon';
 import Exams from '../Screens/Exam/Exam';
 import History from '../Screens/Book History/History';
 import WelcomeScreen from '../Screens/Login/Welcome';
+import Settings from '../Settings/Settings';
 
 
 
@@ -57,7 +58,7 @@ const TabNav = (props) => {
     
         console.log('USER', userToken)
           try {
-            userToken = await AsyncStorage.getItem('userToken');
+            userToken = await AsyncStorage.getItem('token');
             console.log('what is', userToken)
             // loggedIn = await AsyncStorage.getItem('LoggedIn');
           } catch (e) {
@@ -91,10 +92,10 @@ const TabNav = (props) => {
            
           },
           signOut: async (data) => {
-            await AsyncStorage.setItem('LoggedIn', '1');
+            await AsyncStorage.removeItem('token')
             const logout = AsyncStorage.getItem('LoggedIn')
           dispatch({ type: 'SIGN_OUT' });
-          data.navigation.closeDrawer()
+          // data.navigation.closeDrawer()
           
         },
           signUp: async data => {
@@ -108,7 +109,7 @@ const TabNav = (props) => {
         }),
         []
       );
-      console.log('usertoken7', state.userToken)
+      // console.log('usertoken7', state.userToken)
    
     return (
         <AuthContext.Provider value={authContext}>
@@ -118,7 +119,7 @@ const TabNav = (props) => {
                       tabBarIcon: ({ focused, color, size }) => {
                         let iconName;
 
-                        if (route.name === 'Login') {
+                        if (route.name === 'Settings') {
                           iconName = focused
                             ? 'ios-settings'
                             : 'ios-settings-outline';
@@ -150,15 +151,19 @@ const TabNav = (props) => {
                         <>
                         <Tab.Screen name="Training" component={HomePage} />
                         <Tab.Screen name="Marathon" component={Maranthon} />
-                        <Tab.Screen name="Exam" component={Exams} />
-                        <Tab.Screen name="Book History" component={History} />
-                        <Tab.Screen name="Login" component={LoginNavigator}
-                        />
+                        <Tab.Screen name="Exam" component={LoginNavigator} />
+                        <Tab.Screen name="Book History" component={LoginNavigator} />
+                        {/* <Tab.Screen name="Login" component={LoginNavigator} */}
+                        {/* /> */}
                        
                       
                         </>
                       ): (<> 
                       <Tab.Screen name="Training" component={HomePage} />
+                      <Tab.Screen name="Marathon" component={Maranthon} />
+                      <Tab.Screen name="Exam" component={Exams} />
+                      <Tab.Screen name="Book History" component={History} />
+                      <Tab.Screen name="Settings" component={Settings} />
                      
                       {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
                       </>)}

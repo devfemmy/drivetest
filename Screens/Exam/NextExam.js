@@ -5,9 +5,9 @@ import ExamIcon from '../../assets/images/examicon.svg';
 import AppButtons from '../../Components/AppButtons';
 import SlotButtons from '../../Components/SlotButtons';
 import axios from '../../axios';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const Exams = (props) => {
+const NextAppointment = (props) => {
+    const {center_id, address} = props.route.params;
     const [loading, setLoading] = useState('');
     const [response, setResponses] = useState([]);
 
@@ -15,13 +15,13 @@ const Exams = (props) => {
         setLoading(true)
         const id = AsyncStorage.getItem('token').then(
             res => {
-                axios.get(`centers`, {headers: {Authorization: res}})
+                axios.get(`center/slots/next/${center_id}`, {headers: {Authorization: res}})
                 .then(
                   
                     res => {
                         setLoading(false)
                         console.log("centers", res.data)
-                        const responses = res.data.data
+                        const responses = res.data.data;
                         setResponses(responses)
                        
                     }
@@ -90,28 +90,47 @@ const Exams = (props) => {
                     </View>
                 </View>
                 <View style= {styles.secondContainer}>
-                    {response.map(
-                        (resp, index) => {
-                            const my_id = resp.id;
-                            return (
-                                <TouchableOpacity onPress= {() => props.navigation.navigate('Next', {center_id: my_id, address: resp.address})} key= {index} style= {styles.card}>
-                                <View style= {{padding: 20}}>
-                                <View style= {styles.flexContainer}>
-                                        <ExamIcon width= {40} height= {40} />
-                                        <View style= {{width: '80%'}}>
-                                            <Text style= {styles.textStyle3}>
-                                                {`Drive Test ${resp.name} ${resp.state_name}`}
-                                            </Text>
-                                            <Text style= {styles.textStyle4}>
-                                                {resp.address}
-                                            </Text>
-                                        </View>
+                    {response.map((resp, index) => {
+                        const slot_id = resp.slot_id;
+                        const name = resp.slot
+                        return (
+                            <View key= {index} style= {styles.card}>
+                            <View style= {{padding: 20}}>
+                            <View style= {styles.flexContainer}>
+                                    <ExamIcon width= {40} height= {40} />
+                                    <View style= {{width: '80%'}}>
+                                        <Text style= {styles.textStyle3}>
+                                            {`${resp.slot}`}
+                                        </Text>
+                                        <Text style= {styles.textStyle4}>
+                                            {address}
+                                        </Text>
                                     </View>
                                 </View>
-                            </TouchableOpacity>
-                            )
-                        }
-                    )}
+                            </View>
+                            <View style= {styles.lowerContainer}>
+                            <View style= {{width: '100%'}}>
+                                        <Text style= {styles.textStyle4}>Next Available slot: </Text>
+                                        <Text style= {{fontWeight: 'bold'}}>
+                                            {resp.appointment_start}
+                                        </Text>
+                            </View>
+                                <View style= {styles.flexContainer}>
+                                    <View>
+                                        <Text style= {styles.textStyle4}>Exam fees: </Text>
+                                        <Text style= {{fontWeight: 'bold'}}>
+                                            {`₦${resp.price}`}
+                                        </Text>
+                                    </View>
+                                    <View style= {{width: '50%'}}>
+                                    <SlotButtons onPress= {() => props.navigation.navigate('Slots', {slot_id: slot_id, address: address, name: name, price: resp.price})} 
+                                    bg= "#FBB03B" textColor= "white" text= "Book Exam Slot" />
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                        )
+                    })}
                 </View>
         </ScrollView>
     )
@@ -154,7 +173,7 @@ const styles = StyleSheet.create({
     },
     card: {
         backgroundColor: '#FFFFFF',
-        minHeight: 100,
+        minHeight: 150,
         borderColor: '#E6EAF0',
         borderWidth: 1,
         borderRadius: 5,
@@ -169,4 +188,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Exams
+export default NextAppointment

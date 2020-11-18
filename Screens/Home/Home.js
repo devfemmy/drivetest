@@ -1,11 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Progress from 'react-native-progress';
-import { View, StyleSheet,Text, ScrollView, Dimensions } from 'react-native';
+import { View, StyleSheet,Text, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CarImage from '../../assets/images/car.svg';
 import SlotBtn from '../../Components/SlotBtn';
+import axios from '../../axios';
 
 const HomePage = (props) => {
+    const [loading, setLoading] = useState('');
+    const [response, setResponses] = useState([]);
+
+    const getPractiseQuestion = () => {
+        setLoading(true)
+        axios.get('practice').then(
+            res => {
+                setLoading(false)
+                console.log('response', res)
+                const data = res.data.data;
+                setResponses(data)
+            }
+        ).catch(
+
+            err => {
+                setLoading(true)
+                console.log(err)
+            }
+        )
+    }
+
+    useEffect(() => {
+        const unsubscribe = props.navigation.addListener('focus', () => {
+            getPractiseQuestion()
+          });
+  
+        
+        return unsubscribe;
+      }, [props.navigation]);
+    if (loading) {
+        return (
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+           <ActivityIndicator  size="large" color="#FDB813" />
+          </View>
+        );
+      }
     return (
         <ScrollView  style= {styles.container}>
         <View style= {styles.firstContainer}>
@@ -19,50 +56,88 @@ const HomePage = (props) => {
         </View>
 
            <View style= {styles.lowerContainer}>
-               <View>
+               {/* <View>
                 <ScrollView horizontal>
                         <SlotBtn name= "Novice" />
                         <SlotBtn name= "Beginner" />
                         <SlotBtn name= "Intermediate" />
                         <SlotBtn name= "Advanced" />
                     </ScrollView>
-               </View>
-               <TouchableOpacity onPress= {() => props.navigation.navigate('Question')}>
-                <View style= {styles.slotBox}>
-                        <View style= {styles.flexContainer}>
-                            <Text style= {styles.textStyle3}>Practise Test 1</Text>
-                            <Text style= {styles.textStyle4}>Advanced</Text>
-                        </View>
-                        <Progress.Bar height= {10} color= "#BDFD40" borderColor= "#2B2579" progress={1.0} width={null} />
-                </View>
-               </TouchableOpacity>
-               <TouchableOpacity>
-                <View style= {styles.slotBox}>
-                        <View style= {styles.flexContainer}>
-                            <Text style= {styles.textStyle3}>Practise Test 2</Text>
-                            <Text style= {styles.textStyle4}>Intermediate</Text>
-                        </View>
-                        <Progress.Bar height= {10} color= "#FFE200" borderColor= "#2B2579" progress={0.8} width={null} />
-                    </View>
-               </TouchableOpacity>
-               <TouchableOpacity>
-                <View style= {styles.slotBox}>
-                        <View style= {styles.flexContainer}>
-                            <Text style= {styles.textStyle3}>Practise Test 3</Text>
-                            <Text style= {styles.textStyle4}>Beginner</Text>
-                        </View>
-                        <Progress.Bar height= {10} color= "#FF4E00" borderColor= "#2B2579" progress={0.5} width={null} />
-                    </View>
-               </TouchableOpacity>
-               <TouchableOpacity>
-                <View style= {styles.slotBox}>
-                        <View style= {styles.flexContainer}>
-                            <Text style= {styles.textStyle3}>Practise Test 4</Text>
-                            <Text style= {styles.textStyle4}>Novice</Text>
-                        </View>
-                        <Progress.Bar height= {10} color= "#FF0000" borderColor= "#2B2579" progress={0.3} width={null} />
-                    </View>
-               </TouchableOpacity>
+               </View> */}
+               {response.map (
+                   (resp, index) => {
+                       const id = resp.id;
+                       const new_level = parseInt(resp.level)
+                       const level = parseInt(resp.level)/4;
+                       const name = `Level ${resp.level}`;
+                       if (new_level === 1) {
+                        return (
+                            <TouchableOpacity key= {index} onPress= {() => props.navigation.navigate('Question', {id: id})}>
+                            <View style= {styles.slotBox}>
+                                    <View style= {styles.flexContainer}>
+                                        <Text style= {styles.textStyle3}>
+                                            {resp.name}
+                                        </Text>
+                                        <Text style= {styles.textStyle4}>
+                                            {name}
+                                        </Text>
+                                    </View>
+                                    <Progress.Bar height= {10}  color= "#FF0000" borderColor= "#2B2579" progress={level} width={null} />
+                            </View>
+                           </TouchableOpacity>
+                           )
+                       } else if (new_level === 2) {
+                        return (
+                            <TouchableOpacity key= {index} onPress= {() => props.navigation.navigate('Question', {id: id})}>
+                            <View style= {styles.slotBox}>
+                                    <View style= {styles.flexContainer}>
+                                        <Text style= {styles.textStyle3}>
+                                            {resp.name}
+                                        </Text>
+                                        <Text style= {styles.textStyle4}>
+                                            {name}
+                                        </Text>
+                                    </View>
+                                    <Progress.Bar height= {10} color= "#FF4E00" borderColor= "#2B2579" progress={level} width={null} />
+                            </View>
+                           </TouchableOpacity>
+                           )
+                       } else if (new_level === 3) {
+                        return (
+                            <TouchableOpacity key= {index} onPress= {() => props.navigation.navigate('Question', {id: id})}>
+                            <View style= {styles.slotBox}>
+                                    <View style= {styles.flexContainer}>
+                                        <Text style= {styles.textStyle3}>
+                                            {resp.name}
+                                        </Text>
+                                        <Text style= {styles.textStyle4}>
+                                            {name}
+                                        </Text>
+                                    </View>
+                                    <Progress.Bar height= {10}  color= "#FFE200" borderColor= "#2B2579" progress={level} width={null} />
+                            </View>
+                           </TouchableOpacity>
+                           ) 
+                       } else if (new_level === 4) {
+                        return (
+                            <TouchableOpacity key= {index} onPress= {() => props.navigation.navigate('Question', {id: id})}>
+                            <View style= {styles.slotBox}>
+                                    <View style= {styles.flexContainer}>
+                                        <Text style= {styles.textStyle3}>
+                                            {resp.name}
+                                        </Text>
+                                        <Text style= {styles.textStyle4}>
+                                            {name}
+                                        </Text>
+                                    </View>
+                                    <Progress.Bar height= {10} color= "#BDFD40" borderColor= "#2B2579" progress={level} width={null} />
+                            </View>
+                           </TouchableOpacity>
+                           )
+                       }
+
+                   }
+               )}
            </View>
         </ScrollView>
     )
@@ -71,6 +146,7 @@ const HomePage = (props) => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#F7F7FA',
+        height: Dimensions.get('window').height
     },
     firstContainer: {
         height: Dimensions.get('window').height/5.2
@@ -98,7 +174,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 10,
         paddingHorizontal: 20,
         paddingVertical: 25,
-        height: Dimensions.get('window').height/1.5
+        height: Dimensions.get('window').height/1.6
 
     },
     slotBox: {

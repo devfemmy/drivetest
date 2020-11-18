@@ -12,42 +12,42 @@ export default class Question extends React.Component {
     };
   }
 
-  renderOptions = question => {
-    if (question.type === "boolean") {
-      return [
-        <RadioButton style= {styles.radioContainer} value={"True"} key={1}>
-          <Text style={styles.radioText}>True</Text>
-        </RadioButton>,
+  // renderOptions = question => {
+  //   if (question.type === "boolean") {
+  //     return [
+  //       <RadioButton style= {styles.radioContainer} value={"True"} key={1}>
+  //         <Text style={styles.radioText}>True</Text>
+  //       </RadioButton>,
 
-        <RadioButton style= {styles.radioContainer} value={"False"} key={2}>
-          <Text style={styles.radioText}>False</Text>
-        </RadioButton>
-      ];
-    } else {
-      const result = [];
+  //       <RadioButton style= {styles.radioContainer} value={"False"} key={2}>
+  //         <Text style={styles.radioText}>False</Text>
+  //       </RadioButton>
+  //     ];
+  //   } else {
+  //     const result = [];
 
-      question.incorrect_answers.forEach((item, index) => {
-        let key = `${question.id}-${index}`;
+  //     question.options.forEach((item, index) => {
+  //       let key = `${question.id}-${index}`;
 
-        if (index === this.props.correctPosition) {
-          let key2 = `${question.id}-100`;
-          result.push(
-            <RadioButton style= {styles.radioContainer}  value={question.correct_answer} key={key2}>
-              <Text style={styles.radioText}>{question.correct_answer}</Text>
-            </RadioButton>
-          );
-        }
+  //       if (index === this.props.correctPosition) {
+  //         let key2 = `${question.id}-100`;
+  //         result.push(
+  //           <RadioButton style= {styles.radioContainer}  value={question.correct_answer} key={key2}>
+  //             <Text style={styles.radioText}>{question.correct_answer}</Text>
+  //           </RadioButton>
+  //         );
+  //       }
 
-        result.push(
-          <RadioButton style= {styles.radioContainer} value={item} key={key}>
-            <Text style={styles.radioText}>{item}</Text>
-          </RadioButton>
-        );
-      });
+  //       result.push(
+  //         <RadioButton style= {styles.radioContainer} value={item} key={key}>
+  //           <Text style={styles.radioText}>{item}</Text>
+  //         </RadioButton>
+  //       );
+  //     });
 
-      return result;
-    }
-  };
+  //     return result;
+  //   }
+  // };
 
   render() {
     return (
@@ -58,7 +58,7 @@ export default class Question extends React.Component {
                 <Image style= {{width: 150, height: 150, resizeMode: 'contain'}} source= {require('../assets/images/stop.png')} />
             </View>
             <Text style={{ fontSize: 15, color: "#BBC2CC", textAlign: "center", marginVertical: 15 }}>
-            Question {this.props.current + 1} out of 10
+            Question {this.props.current + 1} out of 2
             </Text>
             <Text style={{ fontSize: 16,textAlign: 'center', fontWeight: "bold", color: "#242126", marginVertical: 15}}>
             {this.props.question.question}
@@ -73,7 +73,7 @@ export default class Question extends React.Component {
             onSelect={(index, answer) => this.setState({ answer })}
             selectedIndex={null}
             >
-            {this.renderOptions(this.props.question)}
+            {/* {this.renderOptions(this.props.question)} */}
             </RadioGroup>
             </View>
         </ScrollView>

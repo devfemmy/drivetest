@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
             secureTextEntry = {props.secureTextEntry}
             selectionColor = {props.Color}
             defaultValue = {props.defaultValue}
+            value= {props.value}
             editable= {props.editable}
             autoCorrect= {false}
             onChangeText = {props.onChangeText}
