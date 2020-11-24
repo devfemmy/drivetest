@@ -5,7 +5,7 @@ import AppButtons from '../../Components/AppButtons';
 import CustomInput from '../../Components/CustomInput';
 import axios from '../../axios';
 
-const ForgotPassword = () => {
+const ForgotPassword = (props) => {
     const [email, setUsername] = useState('');
     const [button, setButton] = useState(false);
   
@@ -26,7 +26,7 @@ const ForgotPassword = () => {
             'Alert',
             response,
             [
-              {text: 'OK', onPress: () =>  props.navigation.navigate('ResetToken')},
+              {text: 'OK', onPress: () =>  props.navigation.navigate('ResetToken', {email: email})},
             ],
             { cancelable: false }
           )

@@ -2,25 +2,25 @@ import React, { Component, useState, useContext } from 'react';
 import { View, StyleSheet,Text,Alert,
     ActivityIndicator,
     TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
-import FormInput from '../Components/FormInput';
-import MyBtn from '../Components/MyBtn';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import CustomHeaderButton from '../Components/HeaderButton';
-import InnerBtn from '../Components/InnerBtn';
-import axios from 'axios';
+import axios from '../../axios';
+import AppButtons from '../../Components/AppButtons';
+import CustomInput from '../../Components/CustomInput';
 
 const ResetToken = (props) => {
+  const {email} = props.route.params;
   const [token, setUsername] = useState('');
   const [button, setButton] = useState(false);
+
   const confirmToken = () => {
     if (token === '') {
       alert("Please fill in token sent to you")
   } else {
      setButton(true)
       const data = {
-          token: token
+          token: token,
+          email: email
       }
-      axios.post('https://conduit.detechnovate.net/public/api/conduithealth/user/verify_token', data)
+      axios.post('verify_token', data)
       .then( res => {
         setButton(false)
           console.log('password', res.data)
@@ -93,7 +93,8 @@ const ResetToken = (props) => {
                     </View>
                     <View style= {styles.textContainer}>
                     <Text style= {styles.label}>Enter Reset Token Sent To Email Address</Text>
-                    <FormInput
+                    <CustomInput
+                    labelText= "Token"
                     keyboardType= "numeric"
                     placeholder= "token" 
                     color= "white"
@@ -103,8 +104,8 @@ const ResetToken = (props) => {
                     value={token}
                     onChangeText={setUsername}
                     />
-                     {button ? <ActivityIndicator  size="large" color="#fff" /> :
-                   <InnerBtn onPress= {confirmToken} text= "Continue" bg= "white" color= "#51087E" />}
+                     {button ? <ActivityIndicator  size="large" color="#FBB03B" /> :
+                     <AppButtons onPress= {confirmToken} bg= "#FBB03B" textColor= "white" text= "Continue" />}
                     </View>               
                
                 </View>
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
   },
   forgotText: {
     fontSize: 30,
-    color: 'white',
+    color: 'black',
     fontWeight: 'bold'
   },
   passText: {
@@ -134,8 +135,10 @@ const styles = StyleSheet.create({
     marginVertical: 50
   },
   label: {
-    color: '#A884BF',
-    fontSize: 13
+    color: 'black',
+    opacity: 0.5,
+    fontSize: 13,
+    marginVertical: 10
   },
   textContainer: {
     marginVertical: 30,
@@ -169,7 +172,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   container: {
-    backgroundColor: '#51087E',
+    backgroundColor: '#F7F7FA',
     color: 'white',
     flex: 1,
     paddingHorizontal: 30,

@@ -3,7 +3,7 @@ import axios from 'axios';
 // const token = localStorage.getItem('grandToken');
 const instance = axios.create({//http://192.168.64.2/api_call/
     // baseURL: 'http://192.168.64.2/api_call/',
-    baseURL: 'http://drive.detechnovate.net/public/api/user/',
+    baseURL: 'https://drive.detechnovate.net/public/api/user/',
     headers:{
         // Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',

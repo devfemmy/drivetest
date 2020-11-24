@@ -10,11 +10,14 @@ const PractiseQuestions = (props) => {
     const {id} = props.route.params;
     const [loading, setLoading] = useState(true);
     const [currentQuestion, setCurrentQuestion] = useState(0);
-	const [showScore, setShowScore] = useState(false);
+	  const [showScore, setShowScore] = useState(false);
     const [score, setScore] = useState(0);
     const [newQuestions2, setNewQuestions] = useState([]);
     const [isquestion, setIsQuestion] = useState(false);
-    const [footer, setFooter] = useState(true)
+    const [footer, setFooter] = useState(true);
+    const [showAnswers, setShowAnswers] = useState(true);
+    const [showTip, setShowTip] = useState(true)
+
 
     const fetchQuestions = () => {
         const token = AsyncStorage.getItem('token').then(
@@ -28,7 +31,9 @@ const PractiseQuestions = (props) => {
                     console.log('my Questions', questions)
                     if(questions.length > 0) {
                         setNewQuestions(questions);
-                        setLoading(false)
+                        setLoading(false);
+                        
+                        
                     }else {
                         setIsQuestion(true);
                         setFooter(false)
@@ -92,19 +97,27 @@ const PractiseQuestions = (props) => {
 
     // const questions = newQuestions;
 
-      const handleAnswerOptionClick = (answer_flag) => {
+    const handleAnswerOptionClick = (answer_flag) => {
+    setShowAnswers(false);
+    setShowTip(false)
 		if (answer_flag == "1") {
 			setScore(score + 1);
 		}
 
-		const nextQuestion = currentQuestion + 1;
+
+  };
+  const changeCurrentState = () => {
+  
+    const nextQuestion = currentQuestion + 1;
 		if (nextQuestion < newQuestions.length) {
-			setCurrentQuestion(nextQuestion);
+      setCurrentQuestion(nextQuestion);
+      setShowAnswers(true)
+      setShowTip(true)
 		} else {
             setShowScore(true);
             setFooter(false)
 		}
-	};
+  }
       if (loading) {
         return (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -180,16 +193,47 @@ const PractiseQuestions = (props) => {
                         
                         </View>
                 </View>
+                {showAnswers ? 
+                  <View>
+                  {newQuestions[currentQuestion].options.map((option) => (
+                      <TouchableOpacity style= {styles.btnContainer} onPress={() => handleAnswerOptionClick(option.answer_flag)}>
+                         
+                          <Text style= {styles.textStyle3}>
+                          {option.option_text}
+                          </Text>
+                      </TouchableOpacity>
+                  ))}
+                </View> :
                 <View>
-                    {newQuestions[currentQuestion].options.map((option) => (
-                        <TouchableOpacity style= {styles.btnContainer} onPress={() => handleAnswerOptionClick(option.answer_flag)}>
-                           
-                            <Text style= {styles.textStyle3}>
-                            {option.option_text}
-                            </Text>
-                            </TouchableOpacity>
-                    ))}
-                </View>
+                {newQuestions[currentQuestion].options.map((option, index) => {
+                    if (option.answer_flag == "1") {
+                      return (
+                        <TouchableOpacity style= {styles.btnContainer2} >
+                       
+                        <Text style= {styles.textStyle8}>
+                        {option.option_text}
+                        </Text>
+                     </TouchableOpacity>
+                      )
+
+                    }else {
+                      return (
+                        <TouchableOpacity  style= {styles.btnContainer3}>
+                       
+                        <Text style= {styles.textStyle3}>
+                        {option.option_text}
+                        </Text>
+                    </TouchableOpacity>
+                      )
+
+                    }
+
+                }     
+                
+                )}
+            </View>             
+                }
+
             </>
         )}
         </View>
@@ -197,14 +241,21 @@ const PractiseQuestions = (props) => {
 
         </ScrollView>
         {footer ? <View style= {styles.footer}>
+        <View>
+          
+        </View>
         <Text style= {styles.tipStyle}>TIP:</Text>
-            {isquestion ? 
-        null:<Text style= {styles.tipStyle2}>
+            {showTip ? 
+        null:
+        <Text style= {styles.tipStyle2}>
             
         {newQuestions[currentQuestion].tip}
-        </Text>  
+        </Text> 
+         
         }
-
+          <TouchableOpacity style= {styles.btns} onPress={changeCurrentState} >
+                <Text style= {{fontSize: 16, color: 'white'}}>Next</Text>
+          </TouchableOpacity>
         </View> : null}
 
         </View>
@@ -232,6 +283,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginVertical: 10
     },
+    textStyle8: {
+      color: 'white',
+      fontWeight: 'bold'
+    },
     textStyle3: {
         color: '#2E2E2E'
     },
@@ -244,6 +299,34 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    btnContainer2: {
+      height: 50,
+      borderWidth: 1,
+      borderColor: '#E6EAF0',
+      backgroundColor: 'green',
+      marginVertical: 8,
+      alignItems: 'center',
+      justifyContent: 'center',
+  },
+  btnContainer3: {
+    height: 50,
+    borderWidth: 2,
+    borderColor: 'red',
+    backgroundColor: 'white',
+    marginVertical: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+},
+    btns: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: 50,
+      borderColor: 'white',
+      borderWidth: 1,
+      marginVertical: 15,
+      marginHorizontal: 75,
+      borderRadius: 5
+  },
     tipStyle: {
         color: '#FFFFFF',
         opacity: 0.4,

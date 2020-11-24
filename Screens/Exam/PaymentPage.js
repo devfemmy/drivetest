@@ -1,39 +1,63 @@
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import { View, StyleSheet, ScrollView, ActivityIndicator, Text, Alert } from 'react-native';
+import { View, StyleSheet, ScrollView, ActivityIndicator, Text, Alert, Image } from 'react-native';
 import ExamIcon from '../../assets/images/examicon.svg';
 import AppButtons from '../../Components/AppButtons';
 import CustomInput from '../../Components/CustomInput';
 import axios from '../../axios';
 import RNPaystack from 'react-native-paystack';
+import PaymentInput from '../../Components/PaymentInput';
 
 
-const Details = (props) => {
-    const {time, date, address, name, price, time_id, slot_id} = props.route.params;
-    const [showBtn, setShowBtn] = useState(true)
+const PaymentPage = (props) => {
+    // const {time, date, address, name, price, time_id, slot_id} = props.route.params;
+    const [showBtn, setShowBtn] = useState(true);
+    const [cardNo, setCardNo] = useState('4084084084084081');
+    const [month, setMonth] = useState('09');
+    const [year, setYear] = useState('22');
+    const [CVV, setCvv] = useState('408');
+    const [email, setEmail] = useState('justforcodesanddev@gmail.com')
 
     const chargeCard = () =>  {
         setShowBtn(false)
+        console.log(cardNo, "cardNo")
         RNPaystack.chargeCard({
-          cardNumber: '4084084084084081', 
-          expiryMonth: '11', 
-          expiryYear: '21', 
-          cvc: '408',
-          email: 'chargeIOS@master.dev',
-          amountInKobo: 150000,
+          cardNumber: cardNo, 
+          expiryMonth: month, 
+          expiryYear: year, 
+          cvc: CVV,
+          email: email,
+          amountInKobo: 1500000,
         //   subAccount: 'ACCT_pz61jjjsslnx1d9',
         })
         .then(response => {
            
           console.log(response, "paystack"); // card charged successfully, get reference here
-          setShowBtn(true)
+          setShowBtn(true);
+          Alert.alert(
+            'Alert',
+            'Payment Received',
+            [
+              {text: 'OK', onPress: () => props.navigation.navigate('Exam')},
+            ],
+            { cancelable: false }
+          )
+          
         })
         .catch(error => {
       
           console.log(error, "error pay"); // error is a javascript Error object
           console.log(error.message);
           console.log(error.code);
-          setShowBtn(true)
+          setShowBtn(true);
+          Alert.alert(
+            'Error',
+            'Payment Not Received',
+            [
+              {text: 'OK', onPress: () => props.navigation.navigate('Exam')},
+            ],
+            { cancelable: false }
+          )
         })
         
     }
@@ -114,44 +138,57 @@ const Details = (props) => {
     return (
         <View style= {styles.container}>
             <ScrollView>
-                <View style= {styles.firstContainer}>
-                    <View>
-                            <View style= {styles.flexContainer}>
-                                    <ExamIcon width= {40} height= {40} />
-                                    <View style= {{width: '83%'}}> 
-                                        <Text style= {styles.textStyle3}>
-                                            {name}
-                                        </Text>
-                                        <Text style= {styles.textStyle4}>
-                                            {address}
-                                        </Text>
-                                    </View>
-                                </View>
-                    </View>
-                    </View>
-                    <View style= {styles.secondContainer}>
-                    <Text style= {styles.textStyle4}>Date and Time</Text>
-                    <Text style= {styles.textStyle3}>
-                        {`${date} ${time}`}
-                    </Text>
-                    </View>
-                    <View style= {styles.secondContainer}>
-                    <Text style= {styles.textStyle4}>Price</Text>
-                    <Text style= {styles.textStyle3}>
-                        {`₦${price}`}
-                    </Text>
-                    </View>
-                    <View style= {styles.thirdContainer}>
-                        <Text style= {{fontWeight: 'bold', fontSize: 15, textAlign: 'center', marginBottom: 20}}>Please Provide your information below</Text>
-                        <CustomInput labelText= "Full name" />
-                        <CustomInput labelText= "Mobile" />
-                        <CustomInput labelText= "Email" />
-                    </View>
-            </ScrollView>
-            <View style= {styles.footer}>
-            {showBtn ?  <AppButtons onPress= {() => props.navigation.navigate('Payment')} bg= "#2B2579" textColor= "white" text= "Confirm and Make Payment" />: <ActivityIndicator size= "large" color= "#000075"/>}
+            <PaymentInput
+                width= "100%"
+                onChangeText = {setCardNo}
+                defaultValue = {"4084084084084081"}
+                editable= {false}
+                value= {"4084084084084081"}
+                // placeholder = "4084084084084081" 
+                keyboardType= "number-pad" labelText= "Card Number" />
+                <View style= {styles.flexContainer}>
+                <PaymentInput
+                width= "45%"
+                onChangeText = {setMonth}
+                defaultValue = {"08"}
+                editable= {false}
+                value= {"08"}
+                placeholder = "MM" 
+                keyboardType= "number-pad" labelText= "Expiry Month" />
+                <PaymentInput
+                width= "45%"
+                onChangeText = {setYear}
+                defaultValue = {"22"}
+                editable= {false}
+                value= {"22"}
+                placeholder = "YY" 
+                keyboardType= "number-pad" labelText= "Expiry Year" />
+                </View>
+                <View>
+                <PaymentInput
+                width= "100%"
+                onChangeText = {setCvv}
+                defaultValue = {"408"}
+                editable= {false}
+                value= {"408"}
+                placeholder = "CVV" 
+                keyboardType= "number-pad" labelText= "CVV" />
+                <PaymentInput
+                width= "100%"
+                onChangeText = {setEmail}
+                defaultValue = {"justforcodesanddev@gmail.com"}
+                editable= {false}
+                value= {"justforcodesanddev@gmail.com"}
+                placeholder = "Email Address" 
+                keyboardType= "email-address" labelText= "Email Address" />
+                </View>
+                {showBtn ?  <AppButtons onPress= {chargeCard} bg= "#2B2579" textColor= "white" text= {`PAY 15,000 NGN`} />: <ActivityIndicator size= "large" color= "#000075"/>}
+            <View style= {{alignItems: 'center'}}>
+                <Image 
+                style= {{width: 180, height: 80, resizeMode: 'contain'}}
+                source= {require('../../assets/images/paystack.png')} />
             </View>
-
+            </ScrollView>
         </View>
     )
 }
@@ -159,12 +196,13 @@ const Details = (props) => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#F7F7FA',
-        flex: 1
+        flex: 1,
+        padding: 25
     },
     flexContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        // alignItems: 'center',
         flexWrap: 'wrap'
     },
     firstContainer: {
@@ -209,4 +247,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Details
+export default PaymentPage

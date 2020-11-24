@@ -1,12 +1,9 @@
 import React, { Component, useState, useContext } from 'react';
 import { View, StyleSheet,Text,Alert, TouchableOpacity, ActivityIndicator,
     Image, TextInput, ScrollView } from 'react-native';
-import FormInput from '../Components/FormInput';
-import MyBtn from '../Components/MyBtn';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import CustomHeaderButton from '../Components/HeaderButton';
-import InnerBtn from '../Components/InnerBtn';
-import axios from 'axios';
+import axios from '../../axios';
+import CustomInput from '../../Components/CustomInput';
+import AppButtons from '../../Components/AppButtons';
 
 const ConfirmToken = (props) => {
   const [password, setPassword] = useState('');
@@ -25,7 +22,7 @@ const resetPassword = () => {
           email: email,
           password: password
       }
-      axios.post('https://conduit.detechnovate.net/public/api/conduithealth/user/reset/password', data)
+      axios.post('reset/password', data)
       .then( res => {
         setButton(false)
           console.log('password', res.data)
@@ -98,7 +95,7 @@ const resetPassword = () => {
                     </View>
                     <View style= {styles.textContainer}>
                     <Text style= {styles.label}>Enter your new Password</Text>
-                    <FormInput
+                    <CustomInput
 
                     placeholder= "Enter New Password" 
                     color= "white"
@@ -108,8 +105,8 @@ const resetPassword = () => {
                     value={password}
                     onChangeText={setPassword}
                     />
-                     {button ? <ActivityIndicator  size="large" color="#fff" /> :
-                   <InnerBtn onPress= {resetPassword} text= "Reset Password" bg= "white" color= "#51087E" />}
+                     {button ? <ActivityIndicator  size="large" color="#FBB03B" /> :
+                   <AppButtons onPress= {resetPassword} bg= "#FBB03B" textColor= "white" text= "Reset Password" />}
                     </View>               
                
                 </View>
@@ -128,7 +125,7 @@ const styles = StyleSheet.create({
   },
   forgotText: {
     fontSize: 30,
-    color: 'white',
+    color: 'black',
     fontWeight: 'bold'
   },
   passText: {
@@ -139,7 +136,9 @@ const styles = StyleSheet.create({
     marginVertical: 50
   },
   label: {
-    color: '#A884BF',
+    color: 'black',
+    opacity: 0.5,
+    marginVertical: 10,
     fontSize: 13
   },
   textContainer: {
@@ -174,7 +173,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   container: {
-    backgroundColor: '#51087E',
+    backgroundColor: '#F7F7FA',
     color: 'white',
     flex: 1,
     paddingHorizontal: 30,

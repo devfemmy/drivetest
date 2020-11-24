@@ -15,6 +15,7 @@ const Profile = (props) => {
     const [last_name, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
+    const [showBtn, setShowBtn] = useState(true);
 
     const getProfile = () => {
         const id = AsyncStorage.getItem('token').then(
@@ -71,6 +72,62 @@ const Profile = (props) => {
         )
         .catch( err => {console.log(err)}) 
     }
+    const  editProfile = () => {
+        if (phone === '' || last_name === '' || name === '' ) {
+          alert ('Fill details correctly')
+        } else {
+          setShowBtn(false)
+          const id = AsyncStorage.getItem('token').then(
+              res => {
+                  const data = {
+                      last_name:  last_name,
+                      name: name,
+                      phone: phone,
+                  }
+                  axios.post('profile/edit', data, {headers: {Authorization: res}})
+                  .then(
+                      res => {  
+                         console.log(res)
+                          const message = res.data.message; 
+                          alert(message);
+                          setShowBtn(true)
+                      }
+                  )
+                  .catch(err => {
+                    console.log('error', err.response)
+                      const code = err.response.status;
+                      if (code === 401) {
+                          Alert.alert(
+                              'Error!',
+                              'Expired Token',
+                              [
+                                {text: 'OK', onPress: () => signOut()},
+                              ],
+                              { cancelable: false }
+                            )
+                        
+                      } else {
+                          setShowBtn(true)
+                          Alert.alert(
+                              'Validation Error',
+                              'Please enter a valid Date',
+                              [
+                                {text: 'OK', onPress: () => setShowBtn(true)},
+                              ],
+                              { cancelable: false }
+                            )
+                      }
+       
+                        
+                  
+       
+                  })
+              }
+          )
+          .catch( err => {console.log(err)})
+        }
+  
+       }
 
     useEffect(() => {
         const unsubscribe = props.navigation.addListener('focus', () => {
@@ -116,7 +173,8 @@ const Profile = (props) => {
                 </View>
             </View>
             <View style= {styles.lowerContainer}>
-                    <AppButtons bg= "#FBB03B" textColor= "white" text= "Save Profile" />
+            {showBtn ? <AppButtons onPress= {editProfile} bg= "#FBB03B" textColor= "white" text= "Save Profile" />: <ActivityIndicator size= "large" color= "#000075"/>}
+                   
             </View>
         </ScrollView>
     )

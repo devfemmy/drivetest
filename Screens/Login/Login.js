@@ -33,6 +33,7 @@ const Login = (props) => {
                 AsyncStorage.setItem('name', name);
                 AsyncStorage.setItem('token', `Bearer ${token}`);
                 AsyncStorage.setItem('lastname', last_name);
+                AsyncStorage.setItem('email', email);
                 Alert.alert(
                     "Success",
                     message,
