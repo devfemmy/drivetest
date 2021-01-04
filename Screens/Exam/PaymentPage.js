@@ -28,6 +28,7 @@ const PaymentPage = (props) => {
           cvc: CVV,
           email: email,
           amountInKobo: 1500000,
+        //   reference: '1235'
         //   subAccount: 'ACCT_pz61jjjsslnx1d9',
         })
         .then(response => {
