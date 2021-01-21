@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import {  StyleSheet,ActivityIndicator, View,Text, ScrollView } from 'react-native';
+import {  StyleSheet,ActivityIndicator, View,Text, ScrollView, Image } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from '../../axios';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AppButtons from '../../Components/AppButtons';
 import Success from '../../assets/images/success.svg';
+import { Dimensions } from 'react-native';
 
 const PractiseQuestions = (props) => {
     const {id} = props.route.params;
@@ -16,7 +17,8 @@ const PractiseQuestions = (props) => {
     const [isquestion, setIsQuestion] = useState(false);
     const [footer, setFooter] = useState(true);
     const [showAnswers, setShowAnswers] = useState(true);
-    const [showTip, setShowTip] = useState(true)
+    const [showTip, setShowTip] = useState(true);
+    const [showNext, setShowNext] = useState(false)
 
 
     const fetchQuestions = () => {
@@ -99,6 +101,7 @@ const PractiseQuestions = (props) => {
 
     const handleAnswerOptionClick = (answer_flag) => {
     setShowAnswers(false);
+    setShowNext(true)
     setShowTip(false)
 		if (answer_flag == "1") {
 			setScore(score + 1);
@@ -107,7 +110,7 @@ const PractiseQuestions = (props) => {
 
   };
   const changeCurrentState = () => {
-  
+    setShowNext(false)
     const nextQuestion = currentQuestion + 1;
 		if (nextQuestion < newQuestions.length) {
       setCurrentQuestion(nextQuestion);
@@ -127,7 +130,7 @@ const PractiseQuestions = (props) => {
       }
     return (
         <View style= {styles.container}>
-        <ScrollView style= {{padding: 25}} >
+        <ScrollView style= {styles.scroll} >
             {isquestion ? <Text style= {{textAlign: 'center'}}>No Questions Available</Text>
         :     
         <View>
@@ -183,18 +186,23 @@ const PractiseQuestions = (props) => {
             <>
                 <View style= {styles.questionContainer}>
                     <View>
-                        <Text style= {styles.textStyle4}>Question {currentQuestion + 1}of {newQuestions.length}</Text>
+                        <Text style= {styles.textStyle4}>Question {currentQuestion + 1} of {newQuestions.length}</Text>
                     </View>
                     <View>
                         <Text style= {styles.textStyle5}>
                         {newQuestions[currentQuestion].question}
                         </Text>
+                        {newQuestions[currentQuestion].image === null ? null: 
+                      <View style= {styles.imageContainer}>
+                      <Image style= {styles.imageStyle} source= {{uri: newQuestions[currentQuestion].image}} />
+                      </View>
+                        }
                        
                         
                         </View>
                 </View>
                 {showAnswers ? 
-                  <View>
+                  <ScrollView style= {styles.answerContainer}>
                   {newQuestions[currentQuestion].options.map((option) => (
                       <TouchableOpacity style= {styles.btnContainer} onPress={() => handleAnswerOptionClick(option.answer_flag)}>
                          
@@ -203,8 +211,8 @@ const PractiseQuestions = (props) => {
                           </Text>
                       </TouchableOpacity>
                   ))}
-                </View> :
-                <View>
+                </ScrollView> :
+                <ScrollView style= {styles.answerContainer}>
                 {newQuestions[currentQuestion].options.map((option, index) => {
                     if (option.answer_flag == "1") {
                       return (
@@ -231,7 +239,7 @@ const PractiseQuestions = (props) => {
                 }     
                 
                 )}
-            </View>             
+            </ScrollView>             
                 }
 
             </>
@@ -253,9 +261,10 @@ const PractiseQuestions = (props) => {
         </Text> 
          
         }
-          <TouchableOpacity style= {styles.btns} onPress={changeCurrentState} >
+        {showNext ? (<TouchableOpacity style= {styles.btns} onPress={changeCurrentState} >
                 <Text style= {{fontSize: 16, color: 'white'}}>Next</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>): null }
+
         </View> : null}
 
         </View>
@@ -269,13 +278,28 @@ const styles = StyleSheet.create({
         flex: 1,
         // padding: 25
     },
+    scroll: {
+      padding: 25,
+      // minHeight: Dimensions.get('window').height/1.2,
+    },
     questionContainer: {
-        marginVertical: 25
+        marginVertical: 25,
+        // backgroundColor: 'red'
     },
     textStyle4: {
         textAlign: 'center',
         color: '#BBC2CC',
         fontSize: 15
+    },
+    imageContainer: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginVertical: 5
+    },
+    imageStyle: {
+      height: 180,
+      width: 180,
+      resizeMode: 'cover',
     },
     textStyle5: {
         fontSize: 16,
@@ -287,35 +311,41 @@ const styles = StyleSheet.create({
       color: 'white',
       fontWeight: 'bold'
     },
+    answerContainer: {
+      height: Dimensions.get('window').height/3,
+    },
     textStyle3: {
         color: '#2E2E2E'
     },
     btnContainer: {
-        height: 50,
+        minHeight: 50,
         borderWidth: 1,
         borderColor: '#E6EAF0',
         backgroundColor: 'white',
         marginVertical: 8,
         alignItems: 'center',
         justifyContent: 'center',
+        padding: 5,
     },
     btnContainer2: {
-      height: 50,
+      minHeight: 50,
       borderWidth: 1,
       borderColor: '#E6EAF0',
       backgroundColor: 'green',
       marginVertical: 8,
       alignItems: 'center',
       justifyContent: 'center',
+      padding: 5
   },
   btnContainer3: {
-    height: 50,
-    borderWidth: 2,
-    borderColor: 'red',
+    minHeight: 50,
+    // borderWidth: 2,
+    // borderColor: 'red',
     backgroundColor: 'white',
     marginVertical: 8,
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 5
 },
     btns: {
       alignItems: 'center',

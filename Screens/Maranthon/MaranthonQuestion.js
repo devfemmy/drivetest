@@ -171,7 +171,7 @@ const MaranthonQuestions = (props) => {
             <>
                 <View style= {styles.questionContainer}>
                     <View>
-                        <Text style= {styles.textStyle4}>Question {currentQuestion + 1}of {newQuestions.length}</Text>
+                        <Text style= {styles.textStyle4}>Question {currentQuestion + 1} of {newQuestions.length}</Text>
                     </View>
                     <View>
                         <Text style= {styles.textStyle5}>
