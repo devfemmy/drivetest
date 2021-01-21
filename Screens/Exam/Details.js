@@ -9,8 +9,9 @@ import RNPaystack from 'react-native-paystack';
 
 
 const Details = (props) => {
-    const {time, date, address, name, price, time_id, slot_id} = props.route.params;
+    const {time,payment_id, date, address, name, price, time_id, slot_id} = props.route.params;
     const [showBtn, setShowBtn] = useState(true)
+    console.log(payment_id);
 
     const chargeCard = () =>  {
         setShowBtn(false)
@@ -149,7 +150,7 @@ const Details = (props) => {
                     </View>
             </ScrollView>
             <View style= {styles.footer}>
-            {showBtn ?  <AppButtons onPress= {() => props.navigation.navigate('Payment')} bg= "#2B2579" textColor= "white" text= "Confirm and Make Payment" />: <ActivityIndicator size= "large" color= "#000075"/>}
+            {showBtn ?  <AppButtons onPress= {confirmAppointment} bg= "#2B2579" textColor= "white" text= "Confirm and Make Payment" />: <ActivityIndicator size= "large" color= "#000075"/>}
             </View>
 
         </View>

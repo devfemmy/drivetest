@@ -5,6 +5,7 @@ import ExamIcon from '../../assets/images/examicon.svg';
 import AppButtons from '../../Components/AppButtons';
 import CustomInput from '../../Components/CustomInput';
 import axios from '../../axios'
+import { Button } from 'react-native';
 
 
 const History = (props) => {
@@ -88,30 +89,66 @@ const History = (props) => {
                 <View style= {styles.secondContainer}>
                     {response.map(
                         (app, index) => {
-                            return (
-                                <View key= {index} style= {styles.flexContainer}>
-                                <View style= {{width: '60%'}}>
-                                <Text style= {{...styles.textStyle3, textAlign: 'left', fontSize: 18,}}>
-                                    {app.center_name}
-                                </Text>
-                                <Text style= {{...styles.textStyle3, textAlign: 'left', fontSize: 14, marginVertical: 5, color: '#2B2579'}}>
-                                    {app.slot}
-                                </Text>
-                                <Text style= {{...styles.textStyle4, textAlign: 'left'}}>
-                                    {app.address}
-                                </Text>
-                                </View>
-                                <View style= {{width: '40%'}}>
-                                    <Text style= {{...styles.textStyle4, textAlign: 'right'}}>
-                                        {app.appointment_start}
+                            if (app.status_name === "Booked" ) {
+                                return (
+                                    <View key= {index} style= {styles.flexContainer}>
+                                    <View style= {{width: '60%'}}>
+                                    <Text style= {{...styles.textStyle3, textAlign: 'left', fontSize: 18,}}>
+                                        {app.center_name}
                                     </Text>
-                                    {/* <Text style= {{...styles.textStyle3, textAlign: 'right'}}>₦15,000</Text> */}
-                                    <Text style= {{...styles.textStyle5, textAlign: 'right', fontSize: 17}}>
-                                        {app.status_name}
+                                    <Text style= {{...styles.textStyle3, textAlign: 'left', fontSize: 14, marginVertical: 5, color: '#2B2579'}}>
+                                        {app.slot}
                                     </Text>
+                                    <Text style= {{...styles.textStyle4, textAlign: 'left'}}>
+                                        {app.address}
+                                    </Text>
+                                    <View style= {{marginVertical: 5}}>
+                                    <Button
+                                        onPress={() => props.navigation.navigate('Payment', {payment_id: app.id})}
+                                        title="Pay Now"
+                                        color="#2B2579"
+                                        accessibilityLabel="Pay Now"
+                                    />
+                                    </View>
+                                    </View>
+                                    <View style= {{width: '40%'}}>
+                                        <Text style= {{...styles.textStyle4, textAlign: 'right'}}>
+                                            {app.appointment_start}
+                                        </Text>
+                                        {/* <Text style= {{...styles.textStyle3, textAlign: 'right'}}>₦15,000</Text> */}
+                                        <Text style= {{...styles.textStyle5, textAlign: 'right', fontSize: 17}}>
+                                            {app.status_name}
+                                        </Text>
+                                    </View>
                                 </View>
-                            </View>
-                            )
+                                )
+                            } else {
+                                return (
+                                    <View key= {index} style= {styles.flexContainer}>
+                                    <View style= {{width: '60%'}}>
+                                    <Text style= {{...styles.textStyle3, textAlign: 'left', fontSize: 18,}}>
+                                        {app.center_name}
+                                    </Text>
+                                    <Text style= {{...styles.textStyle3, textAlign: 'left', fontSize: 14, marginVertical: 5, color: '#2B2579'}}>
+                                        {app.slot}
+                                    </Text>
+                                    <Text style= {{...styles.textStyle4, textAlign: 'left'}}>
+                                        {app.address}
+                                    </Text>
+                                    </View>
+                                    <View style= {{width: '40%'}}>
+                                        <Text style= {{...styles.textStyle4, textAlign: 'right'}}>
+                                            {app.appointment_start}
+                                        </Text>
+                                        {/* <Text style= {{...styles.textStyle3, textAlign: 'right'}}>₦15,000</Text> */}
+                                        <Text style= {{...styles.textStyle5, textAlign: 'right', fontSize: 17}}>
+                                            {app.status_name}
+                                        </Text>
+                                    </View>
+                                </View>
+                                )
+                            }
+
                         }
                     )}
 

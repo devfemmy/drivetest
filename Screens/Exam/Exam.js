@@ -100,11 +100,11 @@ const Exams = (props) => {
                                         <ExamIcon width= {40} height= {40} />
                                         <View style= {{width: '80%'}}>
                                             <Text style= {styles.textStyle3}>
-                                                {`Drive Test ${resp.name} ${resp.state_name}`}
+                                                {`Drive Test ${resp.name}`}
                                             </Text>
-                                            <Text style= {styles.textStyle4}>
+                                            {/* <Text style= {styles.textStyle4}>
                                                 {resp.address}
-                                            </Text>
+                                            </Text> */}
                                         </View>
                                     </View>
                                 </View>

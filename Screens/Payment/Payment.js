@@ -1,18 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import { View, StyleSheet,ActivityIndicator,
     Alert,
-    TouchableOpacity, ScrollView,Text, Button } from 'react-native';
+    TouchableOpacity, ScrollView, Button } from 'react-native';
 import PaystackWebView from "react-native-paystack-webview";
 import AsyncStorage from '@react-native-community/async-storage';
-import Logo from '../../assets/images/dtl.svg';
+// import Logo from '../assets/sliders/images/logo.svg';
+import MyAppText from '../Components/MyAppText';
+import ProfileInput from '../Components/ProfileInput';
 import axios from '../../axios';
-import CustomInput from '../../Components/CustomInput'
 
 const PaymentPage = (props) => {
     const [firstname, setFirstname] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('')
-    const { payment_id} = props.route.params;
+    const {plan} = props.route.params;
     const [paymentPlans, setPaymentPlans] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -21,10 +22,10 @@ const PaymentPage = (props) => {
 
 
     const inititatePayment = () => {
-        const id = AsyncStorage.getItem('token').then(
+        const id = AsyncStorage.getItem('Mytoken').then(
             res => {
                 const data = {
-                    id: parseInt(payment_id)
+                    subscription_name: plan
                 }
                 axios.post('payment/initiate', data, {headers: {Authorization: res}})
                 .then(
@@ -40,8 +41,7 @@ const PaymentPage = (props) => {
                     }
                 )
                 .catch(err => {
-                    setLoading(false);
-                    console.log("error", err.response)
+                    setLoading(false)
                     const code = err.response.status;
                     if (code === 401) {
                         Alert.alert(
@@ -59,7 +59,7 @@ const PaymentPage = (props) => {
                             'Network Error',
                             'Please Try Again',
                             [
-                              {text: 'OK', onPress: () => null},
+                              {text: 'OK', onPress: () => setShowBtn(true)},
                             ],
                             { cancelable: false }
                           )
@@ -81,7 +81,7 @@ const PaymentPage = (props) => {
       }, [props.navigation]);
 
       const confirmPayment = (ref_no) => {
-        const id = AsyncStorage.getItem('token').then(
+        const id = AsyncStorage.getItem('Mytoken').then(
             res => {
                 const data = {
                   trans_code: ref_no
@@ -145,19 +145,19 @@ const PaymentPage = (props) => {
       }
     return (
         <ScrollView style= {styles.container}>
-        <Logo width= {240} height= {100} />
+        {/* <Logo width= {200} height= {100} /> */}
         <View style= {styles.paymentContainer}>
-        {/* <TouchableOpacity style= {styles.btnStyle}>
+        <TouchableOpacity style= {styles.btnStyle}>
             <Text style= {styles.colorText}>
                       {plan}
             </Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
         <View style= {{marginVertical: 20}}>
-            <Text style= {{marginVertical: 10}}>
+            <Text>
                 Enter email address to receive your Invoice
             </Text>
             {/* <ProfileInput onChangeText = {(value) => setFirstname(value)}  value= {firstname} width= "100%" label= "Name" /> */}
-            <CustomInput keyboardType= "email-address" onChangeText = {(value) => setEmail(value)}  value= {email} width= "100%" label= "Email" />
+            {/* <ProfileInput keyboardType= "email-address" onChangeText = {(value) => setEmail(value)}  value= {email} width= "100%" label= "Email" /> */}
             {/* <ProfileInput keyboardType= "phone-pad" onChangeText = {(value) => setPhone(value)}  value= {phone} width= "100%" label= "Phone Number" /> */}
         </View>
         </View>
@@ -184,7 +184,7 @@ const PaymentPage = (props) => {
                       // handle response here
                       console.log("transaction response", res.data.transactionRef.reference);
                       const ref_num = res.data.transactionRef.reference;
-                      props.navigation.navigate('Training')
+                      props.navigation.popToTop()
                       confirmPayment(ref_num);
                     }}
                     autoStart={false}
@@ -192,8 +192,7 @@ const PaymentPage = (props) => {
                     renderButton={ (onPress) => <Button
                         onPress={onPress}
                         title="Pay"
-                        style= {styles.renderButton}
-                        color="#2B2579"
+                        color="#51087E"
                         accessibilityLabel="Pay Now"
                       />}
                   />
@@ -221,9 +220,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginVertical: 20
       },
-      renderButton: {
-          backgroundColor: 'red'
-      }
 });
 
 export default PaymentPage

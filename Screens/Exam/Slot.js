@@ -9,7 +9,7 @@ import TimeSlot from '../../Components/TimeSlot';
 import axios from '../../axios';
 
 const Slot = (props) => {
-    const {slot_id, address, name, price} = props.route.params;
+    const {slot_id, address, name, price, payment_id} = props.route.params;
     const [loading, setLoading] = useState('');
     const [slots, setSlots] = useState([]);
     const [title, setTitle] = useState('');
@@ -152,7 +152,7 @@ const Slot = (props) => {
                             <View key= {index}>
                            <ExamSlot onPress= {() => props.navigation.navigate('Details', 
                            {address: address, name: name, date: slotDate,
-                            time_id: time_id, slot_id: slot_id,
+                            time_id: time_id, slot_id: slot_id,payment_id: payment_id,
                            price: price, time: tConvert(sliceTime)})} border= "#2B2579" color= "#2B2579" slot= {tConvert(sliceTime)} />                           
                             </View>
                            

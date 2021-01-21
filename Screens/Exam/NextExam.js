@@ -28,32 +28,8 @@ const NextAppointment = (props) => {
                 )
                 .catch(err => {
                     console.log(err.response)
-                    setLoading(false)
-                    const code = err.response.status;
-                    if (code === 401) {
-                        Alert.alert(
-                            'Error!',
-                            'Expired Token',
-                            [
-                              {text: 'OK', onPress: () => null},
-                            ],
-                            { cancelable: false }
-                          )
-                      
-                    } else {
-                      setLoading(false)
-                        Alert.alert(
-                            'Network Error',
-                            'Please Try Again',
-                            [
-                              {text: 'OK', onPress: () => null},
-                            ],
-                            { cancelable: false }
-                          )
-                    }
-    
-                      
-                      console.log(err.response.status)
+                    setLoading(false);
+                    setResponses([])
     
                 })
             }
@@ -90,9 +66,12 @@ const NextAppointment = (props) => {
                     </View>
                 </View>
                 <View style= {styles.secondContainer}>
+                {response.length === 0 ? (<Text style= {{textAlign: 'center'}}>No appointment for center</Text>) : null}
                     {response.map((resp, index) => {
                         const slot_id = resp.slot_id;
-                        const name = resp.slot
+                        const name = resp.slot;
+                        const payment_id = resp.id;
+                        console.log('payment', resp)
                         return (
                             <View key= {index} style= {styles.card}>
                             <View style= {{padding: 20}}>
@@ -123,7 +102,8 @@ const NextAppointment = (props) => {
                                         </Text>
                                     </View>
                                     <View style= {{width: '50%'}}>
-                                    <SlotButtons onPress= {() => props.navigation.navigate('Slots', {slot_id: slot_id, address: address, name: name, price: resp.price})} 
+                                    <SlotButtons onPress= {() => props.navigation.navigate('Slots', {slot_id: slot_id, address: address, name: name, price: resp.price,
+                                     payment_id: resp.id})} 
                                     bg= "#FBB03B" textColor= "white" text= "Book Exam Slot" />
                                     </View>
                                 </View>
