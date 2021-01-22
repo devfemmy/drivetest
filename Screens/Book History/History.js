@@ -22,7 +22,7 @@ const History = (props) => {
                     res => {
                         setLoading(false)
                         console.log("appointments", res.data)
-                        const responses = res.data.data
+                        const responses = res.data.data.slice(0, 5)
                         setResponses(responses)
                        
                     }
@@ -116,7 +116,7 @@ const History = (props) => {
                                             {app.appointment_start}
                                         </Text>
                                         {/* <Text style= {{...styles.textStyle3, textAlign: 'right'}}>₦15,000</Text> */}
-                                        <Text style= {{...styles.textStyle5, textAlign: 'right', fontSize: 17}}>
+                                        <Text style= {{...styles.textStyle5, textAlign: 'right', fontSize: 17,  fontWeight: 'bold'}}>
                                             {app.status_name}
                                         </Text>
                                     </View>
@@ -141,7 +141,7 @@ const History = (props) => {
                                             {app.appointment_start}
                                         </Text>
                                         {/* <Text style= {{...styles.textStyle3, textAlign: 'right'}}>₦15,000</Text> */}
-                                        <Text style= {{...styles.textStyle5, textAlign: 'right', fontSize: 17}}>
+                                        <Text style= {{...styles.textStyle5, textAlign: 'right', fontSize: 17, color: '#2B2579', fontWeight: 'bold'}}>
                                             {app.status_name}
                                         </Text>
                                     </View>
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderColor: '#E6EAF0',
         borderBottomWidth: 1,
-        // marginVertical: 10,
+        marginVertical: 10,
         paddingVertical: 15
         // paddingRight: 25
     },

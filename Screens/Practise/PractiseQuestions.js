@@ -6,6 +6,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import AppButtons from '../../Components/AppButtons';
 import Success from '../../assets/images/success.svg';
 import { Dimensions } from 'react-native';
+import { SafeAreaView } from 'react-native';
 
 const PractiseQuestions = (props) => {
     const {id} = props.route.params;
@@ -129,7 +130,7 @@ const PractiseQuestions = (props) => {
         );
       }
     return (
-        <View style= {styles.container}>
+        <SafeAreaView style= {styles.container}>
         <ScrollView style= {styles.scroll} >
             {isquestion ? <Text style= {{textAlign: 'center'}}>No Questions Available</Text>
         :     
@@ -267,7 +268,7 @@ const PractiseQuestions = (props) => {
 
         </View> : null}
 
-        </View>
+        </SafeAreaView>
 
     )
 }
@@ -279,11 +280,13 @@ const styles = StyleSheet.create({
         // padding: 25
     },
     scroll: {
-      padding: 25,
+      // padding: 25,
+      paddingHorizontal: 25,
+      minHeight: Dimensions.get('window').height/1.5
       // minHeight: Dimensions.get('window').height/1.2,
     },
     questionContainer: {
-        marginVertical: 25,
+        marginVertical: 15,
         // backgroundColor: 'red'
     },
     textStyle4: {
@@ -312,7 +315,7 @@ const styles = StyleSheet.create({
       fontWeight: 'bold'
     },
     answerContainer: {
-      height: Dimensions.get('window').height/3,
+      // height: Dimensions.get('window').height/3,
     },
     textStyle3: {
         color: '#2E2E2E'
@@ -353,7 +356,8 @@ const styles = StyleSheet.create({
       height: 50,
       borderColor: 'white',
       borderWidth: 1,
-      marginVertical: 15,
+      marginBottom: 25,
+      marginTop: 5,
       marginHorizontal: 75,
       borderRadius: 5
   },
@@ -371,7 +375,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
       },
     footer: {
-        minHeight: 150,
+        minHeight: '10%',
         backgroundColor: '#2B2579',
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,

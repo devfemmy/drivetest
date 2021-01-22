@@ -45,7 +45,7 @@ const ForgotPassword = (props) => {
             if (code === 400) {
               alert('Incorrect Email')
             }
-            if (code === 401) {
+            else if (code === 401) {
                 Alert.alert(
                     'Error!',
                     'Expired Token',
@@ -56,7 +56,7 @@ const ForgotPassword = (props) => {
                   )
               
             } else {
-                setBtn(false)
+              setButton(false)
                 Alert.alert(
                     'Network Error',
                     'Please Try Again',

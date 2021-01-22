@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {  StyleSheet,ActivityIndicator, View,Text, ScrollView } from 'react-native';
+import {  StyleSheet,ActivityIndicator,Image, View,Text, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from '../../axios';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -24,7 +24,7 @@ const MaranthonQuestions = (props) => {
               .then(
                 
                   res => {
-                    console.log("questions", res)
+                    console.log("questions", res.data)
                     const questions = res.data.data.questions;
                     console.log('my Questions', questions)
                     if(questions.length > 0) {
@@ -41,7 +41,7 @@ const MaranthonQuestions = (props) => {
               )
               .catch(err => {
                 setLoading(false)
-                  console.log(err.response)
+                  console.log("error", err.response)
                   const code = err.response.status;
                   if (code === 401) {
                       Alert.alert(
@@ -177,7 +177,13 @@ const MaranthonQuestions = (props) => {
                         <Text style= {styles.textStyle5}>
                         {newQuestions[currentQuestion].question}
                         </Text>
-                       
+                        {newQuestions[currentQuestion].image === null ? null: 
+                      <View style= {styles.imageContainer}>
+                      <Image style= {styles.imageStyle} source= {{uri: newQuestions[currentQuestion].image}} />
+                      
+                       {/* <Text>Image here</Text> */}
+                      </View>
+                        }
                         
                         </View>
                 </View>
@@ -221,6 +227,16 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginVertical: 10
+    },
+    imageContainer: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginVertical: 5
+    },
+    imageStyle: {
+      height: 180,
+      width: 180,
+      resizeMode: 'cover',
     },
     textStyle3: {
         color: '#2E2E2E'
