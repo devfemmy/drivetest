@@ -7,6 +7,7 @@ import AppButtons from '../../Components/AppButtons';
 import Success from '../../assets/images/success.svg';
 import { Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native';
+import { SwipeablePanel } from 'rn-swipeable-panel';
 
 const PractiseQuestions = (props) => {
     const {id} = props.route.params;
@@ -19,7 +20,27 @@ const PractiseQuestions = (props) => {
     const [footer, setFooter] = useState(true);
     const [showAnswers, setShowAnswers] = useState(true);
     const [showTip, setShowTip] = useState(true);
-    const [showNext, setShowNext] = useState(false)
+    const [showNext, setShowNext] = useState(false);
+    const [panelProps, setPanelProps] = useState({
+      fullWidth: true,
+      openLarge: false,
+      showCloseButton: true,
+      onlySmall: true,
+      // allowTouchOutside: true,
+
+      onClose: () => closePanel(),
+      onPressCloseButton: () => closePanel(),
+      // ...or any prop you want
+    });
+    const [isPanelActive, setIsPanelActive] = useState(false);
+  
+    const openPanel = () => {
+      setIsPanelActive(true);
+    };
+  
+    const closePanel = () => {
+      setIsPanelActive(false);
+    };
 
 
     const fetchQuestions = () => {
@@ -102,6 +123,7 @@ const PractiseQuestions = (props) => {
 
     const handleAnswerOptionClick = (answer_flag) => {
     setShowAnswers(false);
+    openPanel()
     setShowNext(true)
     setShowTip(false)
 		if (answer_flag == "1") {
@@ -111,6 +133,7 @@ const PractiseQuestions = (props) => {
 
   };
   const changeCurrentState = () => {
+    closePanel()
     setShowNext(false)
     const nextQuestion = currentQuestion + 1;
 		if (nextQuestion < newQuestions.length) {
@@ -245,28 +268,27 @@ const PractiseQuestions = (props) => {
 
             </>
         )}
+
         </View>
         }
-
+            {showNext ? (<TouchableOpacity style= {styles.btns} onPress={changeCurrentState} >
+                    <Text style= {{fontSize: 16, color: '#2B2579'}}>Next</Text>
+              </TouchableOpacity>): null }
         </ScrollView>
-        {footer ? <View style= {styles.footer}>
-        <View>
-          
-        </View>
-        <Text style= {styles.tipStyle}>TIP:</Text>
-            {showTip ? 
-        null:
-        <Text style= {styles.tipStyle2}>
-            
-        {newQuestions[currentQuestion].tip}
-        </Text> 
-         
-        }
-        {showNext ? (<TouchableOpacity style= {styles.btns} onPress={changeCurrentState} >
-                <Text style= {{fontSize: 16, color: 'white'}}>Next</Text>
-          </TouchableOpacity>): null }
+        {footer ? <SwipeablePanel closeIconStyle= {styles.closeIconStyle} style= {styles.panelStyle} {...panelProps} isActive={isPanelActive}>
+        <ScrollView style= {styles.footerScroll}>
 
-        </View> : null}
+            <Text style= {styles.tipStyle}>TIP:</Text>
+                {showTip ? 
+            null:
+            <Text style= {styles.tipStyle2}>
+                
+            {newQuestions[currentQuestion].tip}
+            </Text> 
+            
+            }
+        </ScrollView>
+        </SwipeablePanel> : null}
 
         </SafeAreaView>
 
@@ -340,6 +362,9 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       padding: 5
   },
+  closeIconStyle: {
+    backgroundColor: '#2B2579'
+  },
   btnContainer3: {
     minHeight: 50,
     // borderWidth: 2,
@@ -354,11 +379,11 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       height: 50,
-      borderColor: 'white',
-      borderWidth: 1,
+      borderColor: '#2B2579',
+      borderWidth: 2,
       marginBottom: 25,
-      marginTop: 5,
-      marginHorizontal: 75,
+      marginTop: 25,
+      marginHorizontal: 25,
       borderRadius: 5
   },
     tipStyle: {
@@ -381,6 +406,11 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 10,
         padding: 20
     },
+    panelStyle: {
+      backgroundColor: '#2B2579',
+      paddingHorizontal: 20
+     
+    },
     lowerContainer: {
         padding: 25
       },
@@ -400,6 +430,9 @@ const styles = StyleSheet.create({
       textStyle2: {
         color: 'black',
         fontWeight: 'bold'
+      },
+      footerScroll: {
+        height: Dimensions.get('window').height/1.7
       }
 });
 

@@ -57,7 +57,7 @@ const Details = (props) => {
                             message,
                             'Appointment Confirmed Successfully',
                             [
-                              {text: 'OK', onPress: () => props.navigation.navigate('Exam')},
+                              {text: 'OK', onPress: () => props.navigation.navigate('Book History')},
                             ],
                             { cancelable: false }
                           )
@@ -142,15 +142,15 @@ const Details = (props) => {
                         {`₦${price}`}
                     </Text>
                     </View>
-                    <View style= {styles.thirdContainer}>
+                    {/* <View style= {styles.thirdContainer}>
                         <Text style= {{fontWeight: 'bold', fontSize: 15, textAlign: 'center', marginBottom: 20}}>Please Provide your information below</Text>
                         <CustomInput labelText= "Full name" />
                         <CustomInput labelText= "Mobile" />
                         <CustomInput labelText= "Email" />
-                    </View>
+                    </View> */}
             </ScrollView>
             <View style= {styles.footer}>
-            {showBtn ?  <AppButtons onPress= {confirmAppointment} bg= "#2B2579" textColor= "white" text= "Confirm and Make Payment" />: <ActivityIndicator size= "large" color= "#000075"/>}
+            {showBtn ?  <AppButtons onPress= {confirmAppointment} bg= "#2B2579" textColor= "white" text= "Confirm Appointment" />: <ActivityIndicator size= "large" color= "#000075"/>}
             </View>
 
         </View>
