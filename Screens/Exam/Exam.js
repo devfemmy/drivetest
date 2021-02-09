@@ -2,17 +2,15 @@ import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { View, StyleSheet,ActivityIndicator, ScrollView, Image,Alert, Text } from 'react-native';
 import ExamIcon from '../../assets/images/examicon.svg';
-import AppButtons from '../../Components/AppButtons';
-import SlotButtons from '../../Components/SlotButtons';
 import axios from '../../axios';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Exams = (props) => {
-    const [loading, setLoading] = useState('');
+    const [loading, setLoading] = useState(true);
     const [response, setResponses] = useState([]);
 
     const getExamSlot = () => {
-        setLoading(true)
+        // setLoading(true)
         const id = AsyncStorage.getItem('token').then(
             res => {
                 axios.get(`centers`, {headers: {Authorization: res}})
@@ -68,7 +66,7 @@ const Exams = (props) => {
   
         
         return unsubscribe;
-      }, [props.navigation]);
+      }, [props.navigation]);   
     if (loading) {
         return (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

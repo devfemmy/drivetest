@@ -26,6 +26,7 @@ const PractiseQuestions = (props) => {
       openLarge: false,
       showCloseButton: true,
       onlySmall: true,
+      closeOnTouchOutside: true,
       // allowTouchOutside: true,
 
       onClose: () => closePanel(),
@@ -100,13 +101,6 @@ const PractiseQuestions = (props) => {
           }
       )
       .catch( err => {console.log(err)}) 
-        // const response = await fetch(
-        //   `https://opentdb.com/api.php?amount=10&difficulty=medium`
-        // );
-        // const questions = await response.json();
-    
-    
-        // await this.setState({ questions: results, loading: false });
       };
 
       useEffect(() => {
@@ -121,7 +115,8 @@ const PractiseQuestions = (props) => {
 
     // const questions = newQuestions;
 
-    const handleAnswerOptionClick = (answer_flag) => {
+    const handleAnswerOptionClick = (answer_flag, option_id) => {
+    
     setShowAnswers(false);
     openPanel()
     setShowNext(true)
@@ -218,7 +213,9 @@ const PractiseQuestions = (props) => {
                         </Text>
                         {newQuestions[currentQuestion].image === null ? null: 
                       <View style= {styles.imageContainer}>
-                      <Image style= {styles.imageStyle} source= {{uri: newQuestions[currentQuestion].image}} />
+                      <Image 
+                      defaultSource= {require('../../assets/images/placeholder2.png')}
+                      style= {styles.imageStyle} source= {{uri: newQuestions[currentQuestion].image}} />
                       </View>
                         }
                        
@@ -228,7 +225,7 @@ const PractiseQuestions = (props) => {
                 {showAnswers ? 
                   <ScrollView style= {styles.answerContainer}>
                   {newQuestions[currentQuestion].options.map((option) => (
-                      <TouchableOpacity style= {styles.btnContainer} onPress={() => handleAnswerOptionClick(option.answer_flag)}>
+                      <TouchableOpacity style= {styles.btnContainer} onPress={() => handleAnswerOptionClick(option.answer_flag, option.id)}>
                          
                           <Text style= {styles.textStyle3}>
                           {option.option_text}

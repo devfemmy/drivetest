@@ -13,7 +13,7 @@ const History = (props) => {
     const [response, setResponses] = useState([]);
 
     const getAppointment = () => {
-        setLoading(true)
+        // setLoading(true)
         const id = AsyncStorage.getItem('token').then(
             res => {
                 axios.get(`my/slots`, {headers: {Authorization: res}})

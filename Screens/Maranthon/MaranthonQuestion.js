@@ -179,7 +179,9 @@ const MaranthonQuestions = (props) => {
                         </Text>
                         {newQuestions[currentQuestion].image === null ? null: 
                       <View style= {styles.imageContainer}>
-                      <Image style= {styles.imageStyle} source= {{uri: newQuestions[currentQuestion].image}} />
+                      <Image
+                      defaultSource= {require('../../assets/images/placeholder2.png')} 
+                      style= {styles.imageStyle} source= {{uri: newQuestions[currentQuestion].image}} />
                       
                        {/* <Text>Image here</Text> */}
                       </View>

@@ -34,15 +34,16 @@ const Login = (props) => {
                 AsyncStorage.setItem('token', `Bearer ${token}`);
                 AsyncStorage.setItem('lastname', last_name);
                 AsyncStorage.setItem('email', email);
-                Alert.alert(
-                    "Success",
-                    message,
-                    [
-                        {text: 'OK'},
-                      ],
-                      { cancelable: false }
-                  )
+                // Alert.alert(
+                //     "Success",
+                //     message,
+                //     [
+                //         {text: 'OK', onPress: },
+                //       ],
+                //       { cancelable: false }
+                //   )
                   signIn({token:token});
+                  props.navigation.navigate('Training')
 
             }
         )

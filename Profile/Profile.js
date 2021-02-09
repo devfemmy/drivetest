@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import { Dimensions, StyleSheet,Alert, Text, View, ActivityIndicator } from 'react-native';
+import {  StyleSheet,Alert, Text, View, ActivityIndicator } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import AppButtons from '../Components/AppButtons';
 import CustomInput from '../Components/CustomInput';

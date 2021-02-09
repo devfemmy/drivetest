@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import * as Progress from 'react-native-progress';
-import { View, StyleSheet,Text, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
+import { View, StyleSheet,Text, ScrollView,RefreshControl, Dimensions, ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CarImage from '../../assets/images/car.svg';
 import SlotBtn from '../../Components/SlotBtn';
 import axios from '../../axios';
 
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  }
+
 const HomePage = (props) => {
-    const [loading, setLoading] = useState('');
+    const [loading, setLoading] = useState(false);
     const [response, setResponses] = useState([]);
+    const [refreshing, setRefreshing] = React.useState(false);
 
     const getPractiseQuestion = () => {
         setLoading(true)
@@ -28,23 +33,32 @@ const HomePage = (props) => {
         )
     }
 
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        getPractiseQuestion()
+        wait(2000).then(() => setRefreshing(false));
+      }, []);
+
+
+
+
     useEffect(() => {
-        const unsubscribe = props.navigation.addListener('focus', () => {
-            getPractiseQuestion()
-          });
+        // const unsubscribe = props.navigation.addListener('focus', () => {
+          
+        //   });
   
-        
-        return unsubscribe;
-      }, [props.navigation]);
-    if (loading) {
-        return (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-           <ActivityIndicator  size="large" color="#FDB813" />
-          </View>
-        );
-      }
+          getPractiseQuestion()
+        // return unsubscribe;
+      }, []);
+
     return (
-        <ScrollView  style= {styles.container}>
+        <ScrollView refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
+    style= {styles.container}>
         <View style= {styles.firstContainer}>
             <View style= {styles.flexContainer}>
                     <View style= {{width: '60%'}}>
@@ -56,14 +70,11 @@ const HomePage = (props) => {
         </View>
 
            <View style= {styles.lowerContainer}>
-               {/* <View>
-                <ScrollView horizontal>
-                        <SlotBtn name= "Novice" />
-                        <SlotBtn name= "Beginner" />
-                        <SlotBtn name= "Intermediate" />
-                        <SlotBtn name= "Advanced" />
-                    </ScrollView>
-               </View> */}
+                {loading ? 
+                <View style={{alignItems: 'center', justifyContent: 'center', height: Dimensions.get('window').height/1.8  }}>
+                          <ActivityIndicator  size="large" color="#FDB813" />
+            </View>: 
+            <View>
                {response.map (
                    (resp, index) => {
                        const id = resp.id;
@@ -138,6 +149,10 @@ const HomePage = (props) => {
 
                    }
                )}
+
+            </View>   
+            }
+
            </View>
         </ScrollView>
     )
