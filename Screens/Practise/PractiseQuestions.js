@@ -138,7 +138,6 @@ const PractiseQuestions = (props) => {
          return question
      })
      setNewQuestions(tempQuestions);
-     console.log(tempQuestions, "questions temp")
   }
 
   const changeCurrentState = () => {
@@ -260,11 +259,13 @@ const PractiseQuestions = (props) => {
                      </TouchableOpacity>
                       )
 
-                    }else if (parseInt(option.question_id) === parseInt(option.id) && option.answer_flag != "1") {
+                    }
+                    else if (newQuestions[currentQuestion].user_choice == option.id 
+                      && option.answer_flag != "1") {
                       return (
                         <TouchableOpacity style= {styles.wrongAnswerBtn}>
                        
-                        <Text style= {styles.textStyle3}>
+                        <Text style= {{...styles.textStyle14, color: 'white'}}>
                         {option.option_text}
                         </Text>
                     </TouchableOpacity>
@@ -365,6 +366,9 @@ const styles = StyleSheet.create({
     textStyle3: {
         color: '#2E2E2E'
     },
+    textStyle14: {
+      color: '#fff'
+  },
     btnContainer: {
         minHeight: 50,
         borderWidth: 1,

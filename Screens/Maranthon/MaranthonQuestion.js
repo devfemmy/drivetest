@@ -11,7 +11,7 @@ const MaranthonQuestions = (props) => {
     // const {id} = props.route.params;
     const [loading, setLoading] = useState(true);
     const [currentQuestion, setCurrentQuestion] = useState(0);
-	const [showScore, setShowScore] = useState(false);
+	  const [showScore, setShowScore] = useState(false);
     const [score, setScore] = useState(0);
     const [newQuestions2, setNewQuestions] = useState([]);
     const [isquestion, setIsQuestion] = useState(false);
@@ -251,6 +251,7 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         alignItems: 'center',
         justifyContent: 'center',
+        padding: 8
     },
     tipStyle: {
         color: '#FFFFFF',
