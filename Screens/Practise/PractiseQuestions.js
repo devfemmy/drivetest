@@ -15,7 +15,7 @@ const PractiseQuestions = (props) => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
 	  const [showScore, setShowScore] = useState(false);
     const [score, setScore] = useState(0);
-    const [newQuestions2, setNewQuestions] = useState([]);
+    const [newQuestions, setNewQuestions] = useState([]);
     const [isquestion, setIsQuestion] = useState(false);
     const [footer, setFooter] = useState(true);
     const [showAnswers, setShowAnswers] = useState(true);
@@ -111,12 +111,13 @@ const PractiseQuestions = (props) => {
         
         return unsubscribe;
       }, [props.navigation]);
-    const newQuestions = newQuestions2;
+    // const newQuestions = newQuestions2;
 
     // const questions = newQuestions;
 
-    const handleAnswerOptionClick = (answer_flag, option_id) => {
-    
+    const handleAnswerOptionClick = (answer_flag, question_id, option_id) => {
+    saveUserChoice(question_id, option_id);
+    console.log(question_id, "question")
     setShowAnswers(false);
     openPanel()
     setShowNext(true)
@@ -127,6 +128,18 @@ const PractiseQuestions = (props) => {
 
 
   };
+
+  const saveUserChoice = (question_id, option_id)=>{
+    const tempQuestions = newQuestions.map((question)=>{
+       if(question.id === question_id)
+         {
+           return {...question,user_choice:option_id}
+         }
+         return question
+     })
+     setNewQuestions(tempQuestions);
+  }
+
   const changeCurrentState = () => {
     closePanel()
     setShowNext(false)
@@ -225,7 +238,8 @@ const PractiseQuestions = (props) => {
                 {showAnswers ? 
                   <ScrollView style= {styles.answerContainer}>
                   {newQuestions[currentQuestion].options.map((option) => (
-                      <TouchableOpacity style= {styles.btnContainer} onPress={() => handleAnswerOptionClick(option.answer_flag, option.id)}>
+                      <TouchableOpacity style= {styles.btnContainer} 
+                      onPress={() => handleAnswerOptionClick(option.answer_flag, option.question_id, option.id)}>
                          
                           <Text style= {styles.textStyle3}>
                           {option.option_text}
@@ -245,7 +259,18 @@ const PractiseQuestions = (props) => {
                      </TouchableOpacity>
                       )
 
-                    }else {
+                    }else if (parseInt(option.question_id) === parseInt(option.id) && option.answer_flag != "1") {
+                      return (
+                        <TouchableOpacity style= {styles.wrongAnswerBtn}>
+                       
+                        <Text style= {styles.textStyle3}>
+                        {option.option_text}
+                        </Text>
+                    </TouchableOpacity>
+                      )
+                    }
+                    
+                    else {
                       return (
                         <TouchableOpacity  style= {styles.btnContainer3}>
                        
@@ -358,6 +383,16 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       padding: 5
+  },
+  wrongAnswerBtn: {
+    minHeight: 50,
+    borderWidth: 1,
+    borderColor: '#E6EAF0',
+    backgroundColor: 'red',
+    marginVertical: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5
   },
   closeIconStyle: {
     backgroundColor: '#2B2579'
