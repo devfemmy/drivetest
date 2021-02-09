@@ -117,7 +117,6 @@ const PractiseQuestions = (props) => {
 
     const handleAnswerOptionClick = (answer_flag, question_id, option_id) => {
     saveUserChoice(question_id, option_id);
-    console.log(question_id, "question")
     setShowAnswers(false);
     openPanel()
     setShowNext(true)
@@ -131,13 +130,15 @@ const PractiseQuestions = (props) => {
 
   const saveUserChoice = (question_id, option_id)=>{
     const tempQuestions = newQuestions.map((question)=>{
-       if(question.id === question_id)
+       if(question.question_id === question_id)
          {
+          
            return {...question,user_choice:option_id}
          }
          return question
      })
      setNewQuestions(tempQuestions);
+     console.log(tempQuestions, "questions temp")
   }
 
   const changeCurrentState = () => {
